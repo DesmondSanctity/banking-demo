@@ -1,4 +1,5 @@
 import path from 'path';
+import os from 'os';
 import fs from 'fs/promises';
 import jwt from 'jsonwebtoken';
 import { WebSocketServer, WebSocket } from 'ws';
@@ -8,13 +9,15 @@ import { jwtSecret } from '../../src/config/app.config.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const errorFilePath = path.join(__dirname, '..', '..', 'errors.txt');
-const interactionFilePath = path.join(
- __dirname,
- '..',
- '..',
- 'interactions.txt'
-);
+const isProduction = process.env.NODE_ENV === 'production';
+
+const errorFilePath = isProduction
+ ? path.join(os.tmpdir(), 'errors.txt')
+ : path.join(__dirname, '..', '..', 'errors.txt');
+
+const interactionFilePath = isProduction
+ ? path.join(os.tmpdir(), 'interactions.txt')
+ : path.join(__dirname, '..', '..', 'interactions.txt');
 
 async function ensureFileExists(filePath: string) {
  try {
