@@ -131,7 +131,7 @@ function isAuthenticated() {
 }
 
 function initWebSocket() {
- ws = new WebSocket('ws://localhost:8080');
+ws = new WebSocket(config.wsUrl);
 
  ws.onopen = () => {
   const token = localStorage.getItem('token');

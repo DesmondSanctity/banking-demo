@@ -2,6 +2,8 @@ import winston from 'winston';
 import { Request, Response, NextFunction } from 'express';
 import { nodeEnv } from '../config/app.config.js';
 
+const sensitiveFields = ['password', 'token', 'secret'];
+
 const logger = winston.createLogger({
  level: 'info',
  format: winston.format.combine(
@@ -29,11 +31,12 @@ export const loggerMiddleware = (
 ) => {
  const oldJson = res.json;
  res.json = function (data) {
+  const sanitizedData = sanitizeLog(data);
   const logLevel = res.statusCode >= 400 ? 'error' : 'info';
   logger[logLevel](`${req.method} ${req.url}`, {
    ip: req.ip,
    userAgent: req.get('User-Agent'),
-   responseData: data,
+   responseData: sanitizedData,
    statusCode: res.statusCode,
   });
   return oldJson.apply(res, [...arguments] as any);
@@ -41,7 +44,6 @@ export const loggerMiddleware = (
 
  next();
 };
-
 
 export const errorLoggerMiddleware = (
  err: any,
@@ -57,6 +59,26 @@ export const errorLoggerMiddleware = (
   statusCode: err.status || 500,
  });
  next(err);
+};
+
+const sanitizeLog = (data: any): any => {
+ if (typeof data !== 'object' || data === null) {
+  return data;
+ }
+
+ const sanitized: { [key: string]: any } = Array.isArray(data) ? [] : {};
+
+ for (const [key, value] of Object.entries(data)) {
+  if (sensitiveFields.includes(key.toLowerCase())) {
+   sanitized[key] = '******';
+  } else if (typeof value === 'object') {
+   sanitized[key] = sanitizeLog(value);
+  } else {
+   sanitized[key] = value;
+  }
+ }
+
+ return sanitized;
 };
 
 export default logger;

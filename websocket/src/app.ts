@@ -27,7 +27,12 @@ app.get('/api/websocket/errors', async (req, res) => {
 
 app.get('/api/websocket/interactions', async (req, res) => {
  try {
-  const interactionFilePath = path.join(__dirname, '..','..', 'interactions.txt');
+  const interactionFilePath = path.join(
+   __dirname,
+   '..',
+   '..',
+   'interactions.txt'
+  );
   console.log(interactionFilePath);
   const content = await fs.readFile(interactionFilePath, 'utf-8');
   res.type('text/plain').send(content);
