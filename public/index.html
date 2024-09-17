@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Banking Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">BankingDemo</div>
+        <div class="nav-links">
+            <a href="#" class="nav-link">Account</a>
+            <a href="#" class="nav-link">History</a>
+            <a href="#" class="nav-link">Services</a>
+        </div>
+        <div class="auth-buttons">
+            <button id="signupBtn" class="btn">Sign Up</button>
+            <button id="loginBtn" class="btn btn-primary">Login</button>
+        </div>
+    </nav>
+
+    <main id="mainContent">
+        <!-- Login Form -->
+        <div id="loginForm" class="auth-form">
+            <h2>Login</h2>
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button id="submitLogin" class="btn btn-primary">Login</button>
+            <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="auth-form" style="display: none;">
+            <h2>Sign Up</h2>
+            <input type="text" id="signupName" placeholder="Full Name" required>
+            <input type="email" id="signupEmail" placeholder="Email" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <button id="submitSignup" class="btn btn-primary">Sign Up</button>
+            <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+        </div>
+
+        <!-- WebSocket Demo -->
+        <div id="websocketDemo" class="websocket-form" style="display: none;">
+            <h2>WebSocket Demo</h2>
+            <input type="text" id="demoInput" placeholder="Enter message">
+            <div class="button-group">
+                <button id="successBtn" class="btn btn-success">Send Success</button>
+                <button id="errorBtn" class="btn btn-error">Send Error</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
