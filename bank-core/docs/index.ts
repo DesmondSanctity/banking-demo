@@ -1,5 +1,5 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import { port } from '../src/config/app.config.js';
+import { baseURL } from '../src/config/app.config.js';
 
 const swaggerOptions = {
  definition: {
@@ -11,7 +11,7 @@ const swaggerOptions = {
   },
   servers: [
    {
-    url: `http://localhost:${port}`,
+    url: `{baseURL}`,
    },
   ],
   components: {
