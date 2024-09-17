@@ -128,9 +128,10 @@ To run the project locally, follow these steps:
 ```bash
 DATABASE_URL="<mongodbURL>/banking-demo"
 MONGO_URL="<mongodbURL>/testdb"
+BASE_URL=http://localhost:3000
 JWT_SECRET="<your-jwt-secret>"
-APP_PORT=3000
-WS_PORT=8080
+APP_PORT_1=3000
+APP_PORT_2=3001
 ```
 4. Start the application by running `npm run dev` in the project directory.
 5. Open your browser and navigate to `http://localhost:3000` to access the application.
@@ -145,9 +146,10 @@ To run the project using docker, follow these steps:
 ```bash
 DATABASE_URL="<mongodbURL>/banking-demo"
 MONGO_URL="<mongodbURL>/testdb"
+BASE_URL=http://localhost:3000
 JWT_SECRET="<your-jwt-secret>"
-APP_PORT=3000
-WS_PORT=8080
+APP_PORT_1=3000
+APP_PORT_2=3001
 ```
 4. Start the application by running docker in detached mode using this command `docker-compose up -d` in the project directory.
 5. Open your browser and navigate to `http://localhost:3000` to access the application.
