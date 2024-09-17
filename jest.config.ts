@@ -5,7 +5,7 @@ export default {
  moduleNameMapper: {
   '^(\\.{1,2}/.*)\\.js$': '$1',
  },
- setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+ setupFilesAfterEnv: ['<rootDir>/bank-core/src/tests/setup.ts'],
  transform: {
   '^.+\\.ts$': ['ts-jest', { useESM: true }],
  },

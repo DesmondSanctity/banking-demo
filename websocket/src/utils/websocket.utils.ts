@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { WebSocketServer, WebSocket } from 'ws';
 import { fileURLToPath } from 'url';
 import { createServer } from 'http';
-import { jwtSecret } from '../config/app.config.js';
+import { jwtSecret } from '../../src/config/app.config.js';
 
 const server = createServer();
 const wss = new WebSocketServer({ server });

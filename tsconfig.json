@@ -13,6 +13,6 @@
   "sourceMap": true,
   "declaration": true
  },
- "include": ["src/**/*"],
+ "include": ["bank-core/src/**/*", "websocket/src/utils/websocket.utils.ts"],
  "exclude": ["node_modules", "**/*.spec.ts"]
 }

@@ -67,7 +67,7 @@ submitLogin.addEventListener('click', async () => {
  const password = document.getElementById('loginPassword').value;
 
  try {
-  const response = await fetch('/api/users/login', {
+  const response = await fetch('http://localhost:3000/api/users/login', {
    method: 'POST',
    headers: { 'Content-Type': 'application/json' },
    body: JSON.stringify({ email, password }),
@@ -95,7 +95,7 @@ submitSignup.addEventListener('click', async () => {
  const password = document.getElementById('signupPassword').value;
 
  try {
-  const response = await fetch('/api/users/signup', {
+  const response = await fetch('http://localhost:3000/api/users/signup', {
    method: 'POST',
    headers: { 'Content-Type': 'application/json' },
    body: JSON.stringify({ name, email, password }),

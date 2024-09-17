@@ -29,7 +29,7 @@ const swaggerOptions = {
    },
   ],
  },
- apis: ['./docs/specs/*.yml'], // Path to the API routes
+ apis: ['./bank-core/docs/specs/*.yml'], // Path to the API routes
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
