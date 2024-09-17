@@ -22,7 +22,7 @@ const app = express();
 
 app.use(
  cors({
-  origin: ['http://localhost:3001', 'https://websocket.onrender.com'],
+  origin: ['http://localhost:3001', 'https://websocket-p1rk.onrender.com'],
  })
 );
 
