@@ -13,6 +13,8 @@ const errorBtn = document.getElementById('errorBtn');
 const demoInput = document.getElementById('demoInput');
 
 let ws;
+const isProduction = window.location.hostname !== 'localhost';
+const wsUrl = isProduction ? config.wsUrlLive : config.wsUrlLocal;
 
 function showLoginForm() {
  loginForm.style.display = 'block';
@@ -131,7 +133,7 @@ function isAuthenticated() {
 }
 
 function initWebSocket() {
-ws = new WebSocket(config.wsUrl);
+ws = new WebSocket(wsUrl);
 
  ws.onopen = () => {
   const token = localStorage.getItem('token');
