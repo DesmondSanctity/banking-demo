@@ -1,4 +1,4 @@
 const config = {
- wsUrlLive: 'wss://35.157.117.28:8080',
+ wsUrlLive: 'wss://websocket-p1rk.onrender.com',
  wsUrlLocal: 'ws://localhost:8080',
 };

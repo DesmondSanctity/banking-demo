@@ -146,7 +146,6 @@ ws = new WebSocket(wsUrl);
 
  ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  console.log('Received:', data);
   if (data.type === 'auth' && data.status === 'error') {
    handleUnauthenticated();
   }
@@ -154,7 +153,6 @@ ws = new WebSocket(wsUrl);
 }
 
 successBtn.addEventListener('click', () => {
- console.log('Success button clicked', ws);
  if (!isAuthenticated()) {
   handleUnauthenticated();
   return;
@@ -177,7 +175,6 @@ successBtn.addEventListener('click', () => {
 });
 
 errorBtn.addEventListener('click', () => {
- console.log('Error button clicked', ws);
  if (!isAuthenticated()) {
   handleUnauthenticated();
   return;

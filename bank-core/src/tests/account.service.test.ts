@@ -72,8 +72,7 @@ describe('Account Service', () => {
     description: 'Test Account2',
    });
 
-   const result = await accountService.getAccounts(user._id);
-   console.log('Accounts:', result); // Debug log
+   const result = await accountService.getAccounts(user._id);// Debug log
    expect(result).toHaveLength(2);
    expect(result[0]).toHaveProperty('accountNumber', '5746363636');
    expect(result[1]).toHaveProperty('accountNumber', '9696382615');
