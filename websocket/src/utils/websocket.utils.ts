@@ -16,6 +16,14 @@ const interactionFilePath = path.join(
  'interactions.txt'
 );
 
+async function ensureFileExists(filePath: string) {
+ try {
+  await fs.access(filePath);
+ } catch {
+  await fs.writeFile(filePath, '');
+ }
+}
+
 export const setupWebSocket = (wss: WebSocketServer) => {
  wss.on('connection', (ws: WebSocket) => {
   ws.on('message', async (message: string) => {
@@ -30,9 +38,11 @@ export const setupWebSocket = (wss: WebSocketServer) => {
     }
    } else if (data.type === 'event.error') {
     console.log(data.data);
+    await ensureFileExists(errorFilePath);
     await fs.appendFile(errorFilePath, `${data.data}\n`);
    } else if (data.type === 'event.interaction') {
     console.log(data.data);
+    await ensureFileExists(interactionFilePath);
     await fs.appendFile(interactionFilePath, `${data.data}\n`);
    }
   });
