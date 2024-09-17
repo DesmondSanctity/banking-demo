@@ -20,7 +20,7 @@ pids
 lib-cov
 
 # Websocket logs
-error.txt
+errors.txt
 interactions.txt
 
 # Coverage directory used by tools like istanbul

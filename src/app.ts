@@ -8,7 +8,7 @@ import userRoutes from './routes/user.routes.js';
 import accountRoutes from './routes/account.routes.js';
 import transactionRoutes from './routes/transaction.routes.js';
 import { rateLimiter } from './middlewares/ratelimiter.js';
-import { loggerMiddleware } from './middlewares/logger.js';
+import { errorLoggerMiddleware, loggerMiddleware } from './middlewares/logger.js';
 import db from './config/db.config.js';
 import { port } from './config/app.config.js';
 import './utils/websocket.utils.js';
@@ -49,7 +49,7 @@ app.get('/api/websocket/interactions', async (req, res) => {
  }
 });
 
-// app.use(errorHandler);
+app.use(errorLoggerMiddleware);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

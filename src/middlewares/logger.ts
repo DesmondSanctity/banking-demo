@@ -27,11 +27,36 @@ export const loggerMiddleware = (
  res: Response,
  next: NextFunction
 ) => {
- logger.info(`${req.method} ${req.url}`, {
+ const oldJson = res.json;
+ res.json = function (data) {
+  const logLevel = res.statusCode >= 400 ? 'error' : 'info';
+  logger[logLevel](`${req.method} ${req.url}`, {
+   ip: req.ip,
+   userAgent: req.get('User-Agent'),
+   responseData: data,
+   statusCode: res.statusCode,
+  });
+  return oldJson.apply(res, [...arguments] as any);
+ };
+
+ next();
+};
+
+
+export const errorLoggerMiddleware = (
+ err: any,
+ req: Request,
+ res: Response,
+ next: NextFunction
+) => {
+ logger.error(`${req.method} ${req.url}`, {
   ip: req.ip,
   userAgent: req.get('User-Agent'),
+  errorMessage: err.message,
+  errorStack: err.stack,
+  statusCode: err.status || 500,
  });
- next();
+ next(err);
 };
 
 export default logger;

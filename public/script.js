@@ -1,5 +1,6 @@
 const loginBtn = document.getElementById('loginBtn');
 const signupBtn = document.getElementById('signupBtn');
+const logoutBtn = document.getElementById('logoutBtn');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const showSignup = document.getElementById('showSignup');
@@ -39,16 +40,27 @@ function updateNavButtons() {
   signupBtn.textContent = 'API Docs';
   signupBtn.onclick = () =>
    window.open('/docs', '_blank');
+  logoutBtn.style.display = 'inline-block';
  } else {
   loginBtn.textContent = 'Login';
   loginBtn.onclick = showLoginForm;
   signupBtn.textContent = 'Sign Up';
   signupBtn.onclick = showSignupForm;
+  logoutBtn.style.display = 'none';
  }
 }
 
 showSignup.addEventListener('click', showSignupForm);
 showLogin.addEventListener('click', showLoginForm);
+
+logoutBtn.addEventListener('click', () => {
+ localStorage.removeItem('token');
+ updateNavButtons();
+ showLoginForm();
+ if (ws) {
+  ws.close();
+ }
+});
 
 submitLogin.addEventListener('click', async () => {
  const email = document.getElementById('loginEmail').value;
