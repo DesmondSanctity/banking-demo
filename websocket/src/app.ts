@@ -2,16 +2,19 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs/promises';
-import '../src/utils/websocket.utils.js';
+import { createServer } from 'http';
+import { WebSocketServer } from 'ws';
+import { setupWebSocket } from '../src/utils/websocket.utils.js';
 import { port } from './config/app.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const server = createServer(app);
+const wss = new WebSocketServer({ server });
 
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/api/websocket/errors', async (req, res) => {
@@ -41,7 +44,9 @@ app.get('/api/websocket/interactions', async (req, res) => {
  }
 });
 
-app.listen(port, async () => {
+setupWebSocket(wss);
+
+server.listen(port, () => {
  console.log(`Server running on port ${port}`);
 });
 
