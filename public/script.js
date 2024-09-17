@@ -33,11 +33,12 @@ function showWebSocketDemo() {
 
 function updateNavButtons() {
  if (localStorage.getItem('token')) {
-  loginBtn.textContent = 'Author';
-  loginBtn.onclick = () => window.open('https://author-link.com', '_blank');
-  signupBtn.textContent = 'Source Code';
+  loginBtn.textContent = 'Source';
+  loginBtn.onclick = () =>
+   window.open('https://github.com/desmondsanctity/banking-demo', '_blank');
+  signupBtn.textContent = 'API Docs';
   signupBtn.onclick = () =>
-   window.open('https://source-code-link.com', '_blank');
+   window.open('/docs', '_blank');
  } else {
   loginBtn.textContent = 'Login';
   loginBtn.onclick = showLoginForm;
@@ -101,21 +102,49 @@ submitSignup.addEventListener('click', async () => {
  }
 });
 
+function handleUnauthenticated() {
+ alert('User is not authenticated. Redirecting to login.');
+ localStorage.removeItem('token');
+ showLoginForm();
+}
+
+function isAuthenticated() {
+ return !!localStorage.getItem('token');
+}
+
 function initWebSocket() {
  ws = new WebSocket('ws://localhost:8080');
 
  ws.onopen = () => {
   const token = localStorage.getItem('token');
+  if (!token) {
+   handleUnauthenticated();
+   return;
+  }
   ws.send(JSON.stringify({ type: 'auth', token }));
  };
 
  ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
   console.log('Received:', data);
+  if (data.type === 'auth' && data.status === 'error') {
+   handleUnauthenticated();
+  }
  };
 }
 
 successBtn.addEventListener('click', () => {
+ console.log('Success button clicked', ws);
+ if (!isAuthenticated()) {
+  handleUnauthenticated();
+  return;
+ }
+
+ if (!demoInput.value.trim()) {
+  alert('Input cannot be empty for success event!');
+  return;
+ }
+
  if (ws && ws.readyState === WebSocket.OPEN) {
   ws.send(
    JSON.stringify({
@@ -128,6 +157,12 @@ successBtn.addEventListener('click', () => {
 });
 
 errorBtn.addEventListener('click', () => {
+ console.log('Error button clicked', ws);
+ if (!isAuthenticated()) {
+  handleUnauthenticated();
+  return;
+ }
+
  if (ws && ws.readyState === WebSocket.OPEN) {
   ws.send(
    JSON.stringify({
