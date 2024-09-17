@@ -47,8 +47,19 @@ export const sendMoney = async (
    { session }
   );
 
+  const newTransaction = await Transaction.findOne({
+   _id: transaction[0]._id,
+  })
+   .populate('fromAccountId toAccountId')
+   .session(session);
+
   await session.commitTransaction();
-  return transaction[0].toObject();
+
+  if (!newTransaction) {
+   throw new Error('Transaction not found');
+  }
+
+  return newTransaction.toObject() as TransactionResponse;
  } catch (error) {
   await session.abortTransaction();
   throw error;
@@ -60,9 +71,10 @@ export const sendMoney = async (
 export const getTransactionHistory = async (
  accountId: string
 ): Promise<TransactionResponse[]> => {
- const transactions = await Transaction.find({ fromAccountId: accountId }).sort(
-  { createdAt: -1 }
- );
+ const transactions = await Transaction.find({
+  $or: [{ fromAccountId: accountId }, { toAccountId: accountId }],
+ }).sort({ createdAt: -1 });
+
  return transactions.map((t) => t.toObject());
 };
 

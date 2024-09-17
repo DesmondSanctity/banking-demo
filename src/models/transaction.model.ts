@@ -7,7 +7,6 @@ export interface SendMoneyRequest {
 }
 
 export interface UpdateTransactionRequest {
- amount?: number;
  type?: string;
 }
 

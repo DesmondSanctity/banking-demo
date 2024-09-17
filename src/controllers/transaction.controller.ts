@@ -17,8 +17,10 @@ export const sendMoney = async (req: Request, res: Response) => {
    validatedData as SendMoneyRequest
   );
   res.json({ message: 'Transaction successful', transaction });
- } catch (error) {
-  res.status(400).json({ message: 'Error processing transaction', error });
+ } catch (error: any) {
+  res
+   .status(400)
+   .json({ message: 'Error processing transaction', error: error.message });
  }
 };
 
@@ -28,10 +30,11 @@ export const getTransactionHistory = async (req: Request, res: Response) => {
   const transactions: TransactionResponse[] =
    await transactionService.getTransactionHistory(accountId);
   res.json(transactions);
- } catch (error) {
-  res
-   .status(500)
-   .json({ message: 'Error fetching transaction history', error });
+ } catch (error: any) {
+  res.status(500).json({
+   message: 'Error fetching transaction history',
+   error: error.message,
+  });
  }
 };
 
@@ -40,8 +43,10 @@ export const getAllTransactions = async (req: Request, res: Response) => {
   const transactions: TransactionResponse[] =
    await transactionService.getAllTransactions();
   res.json(transactions);
- } catch (error) {
-  res.status(500).json({ message: 'Error fetching transactions', error });
+ } catch (error: any) {
+  res
+   .status(500)
+   .json({ message: 'Error fetching transactions', error: error.message });
  }
 };
 
@@ -55,8 +60,10 @@ export const getTransactionById = async (req: Request, res: Response) => {
   } else {
    res.status(404).json({ message: 'Transaction not found' });
   }
- } catch (error) {
-  res.status(500).json({ message: 'Error fetching transaction', error });
+ } catch (error: any) {
+  res
+   .status(500)
+   .json({ message: 'Error fetching transaction', error: error.message });
  }
 };
 
@@ -70,8 +77,10 @@ export const updateTransaction = async (req: Request, res: Response) => {
     validatedData as UpdateTransactionRequest
    );
   res.json(updatedTransaction);
- } catch (error) {
-  res.status(400).json({ message: 'Error updating transaction', error });
+ } catch (error: any) {
+  res
+   .status(400)
+   .json({ message: 'Error updating transaction', error: error.message });
  }
 };
 
@@ -80,7 +89,9 @@ export const deleteTransaction = async (req: Request, res: Response) => {
   const { id } = req.params;
   await transactionService.deleteTransaction(id);
   res.json({ message: 'Transaction deleted successfully' });
- } catch (error) {
-  res.status(500).json({ message: 'Error deleting transaction', error });
+ } catch (error: any) {
+  res
+   .status(500)
+   .json({ message: 'Error deleting transaction', error: error.message });
  }
 };

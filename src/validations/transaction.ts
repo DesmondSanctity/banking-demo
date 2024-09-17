@@ -7,6 +7,5 @@ export const sendMoneySchema = z.object({
 });
 
 export const updateTransactionSchema = z.object({
- amount: z.number().positive().optional(),
  type: z.string().optional(),
 });

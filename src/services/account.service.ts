@@ -6,6 +6,7 @@ import {
  AccountResponse,
 } from '../models/account.model.js';
 import Account from '../schemas/account.schema.js';
+import User from '../schemas/user.schema.js';
 
 export const createAccount = async (
  data: CreateAccountRequest
@@ -29,8 +30,16 @@ export const createAccount = async (
      accountNumber,
      balance: 5000,
      userId: data.userId,
+     description: data.description,
     },
    ],
+   { session }
+  );
+
+  // Add the created account to the user's accounts array
+  await User.findByIdAndUpdate(
+   data.userId,
+   { $push: { accounts: account[0]._id } },
    { session }
   );
 
@@ -46,11 +55,12 @@ export const createAccount = async (
 };
 
 export const getAccounts = async (
- userId: string
+ userId: mongoose.Types.ObjectId
 ): Promise<AccountResponse[]> => {
- const accounts = await Account.find({ userId })
-  .populate('user')
-  .populate('transactions');
+ const accounts = await Account.find({ userId }).populate({
+  path: 'userId',
+  select: '-accounts',
+ });
  return accounts.map((account) => account.toObject());
 };
 
@@ -58,7 +68,10 @@ export const getAccountById = async (
  id: string
 ): Promise<AccountResponse | null> => {
  const account = await Account.findById(id)
-  .populate('user')
+  .populate({
+   path: 'userId',
+   select: '-accounts',
+  })
   .populate('transactions');
  if (!account) return null;
  return account.toObject();
@@ -68,13 +81,33 @@ export const updateAccount = async (
  id: string,
  data: UpdateAccountRequest
 ): Promise<AccountResponse> => {
- const updatedAccount = await Account.findByIdAndUpdate(id, data, { new: true })
-  .populate('user')
-  .populate('transactions');
+ const updatedAccount = await Account.findByIdAndUpdate(id, data, {
+  new: true,
+ });
  if (!updatedAccount) throw new Error('Account not found');
  return updatedAccount.toObject();
 };
 
 export const deleteAccount = async (id: string): Promise<void> => {
- await Account.findByIdAndDelete(id);
+ const session = await mongoose.startSession();
+ session.startTransaction();
+
+ try {
+  const account = await Account.findById(id).session(session);
+  if (!account) {
+   throw new Error('Account not found');
+  }
+
+  await Account.findByIdAndDelete(id).session(session);
+  await User.findByIdAndUpdate(account.userId, {
+   $pull: { accounts: id },
+  }).session(session);
+
+  await session.commitTransaction();
+ } catch (error) {
+  await session.abortTransaction();
+  throw error;
+ } finally {
+  session.endSession();
+ }
 };

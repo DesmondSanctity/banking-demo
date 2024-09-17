@@ -43,8 +43,8 @@ export const searchUser = async (req: Request, res: Response) => {
   const { accountNumber } = req.params;
   const name: string = await userService.searchUser(accountNumber);
   res.json({ name });
- } catch (error) {
-  res.status(404).json({ message: 'Account not found' });
+ } catch (error: any) {
+  res.status(404).json({ message: 'Account not found', error: error.message });
  }
 };
 
@@ -66,8 +66,10 @@ export const getUserById = async (req: Request, res: Response) => {
   } else {
    res.status(404).json({ message: 'User not found' });
   }
- } catch (error) {
-  res.status(500).json({ message: 'Error fetching user', error });
+ } catch (error: any) {
+  res
+   .status(500)
+   .json({ message: 'Error fetching user', error: error.message });
  }
 };
 
@@ -80,8 +82,10 @@ export const updateUser = async (req: Request, res: Response) => {
    validatedData as UpdateUserRequest
   );
   res.json(updatedUser);
- } catch (error) {
-  res.status(400).json({ message: 'Error updating user', error });
+ } catch (error: any) {
+  res
+   .status(400)
+   .json({ message: 'Error updating user', error: error.message });
  }
 };
 
@@ -90,7 +94,9 @@ export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   await userService.deleteUser(id);
   res.json({ message: 'User deleted successfully' });
- } catch (error) {
-  res.status(500).json({ message: 'Error deleting user', error });
+ } catch (error: any) {
+  res
+   .status(500)
+   .json({ message: 'Error deleting user', error: error.message });
  }
 };

@@ -10,7 +10,6 @@ import {
  LoginResponse,
  SearchUser,
 } from '../models/user.model.js';
-import { AccountResponse } from '../models/account.model.js';
 import User from '../schemas/user.schema.js';
 import Account from '../schemas/account.schema.js';
 import { jwtSecret } from '../config/app.config.js';
@@ -36,14 +35,22 @@ export const registerUser = async (
    { session }
   );
 
-  await Account.create(
+  const account = await Account.create(
    [
     {
      accountNumber,
      balance: 5000,
      userId: user[0]._id,
+     description: 'First Account',
     },
    ],
+   { session }
+  );
+
+  // Add the created account to the user's accounts array
+  await User.findByIdAndUpdate(
+   user[0]._id,
+   { $push: { accounts: account[0]._id } },
    { session }
   );
 
@@ -60,14 +67,14 @@ export const registerUser = async (
 export const loginUser = async (
  data: LoginUserRequest
 ): Promise<LoginResponse> => {
- const user = await User.findOne({ email: data.email });
+ const user = await User.findOne({ email: data.email }).select('+password');
 
  if (!user || !(await bcrypt.compare(data.password, user.password))) {
   throw new Error('Invalid credentials');
  }
 
- const token = jwt.sign({ userId: user._id }, jwtSecret!, {
-  expiresIn: '1h',
+ const token = jwt.sign({ email: user.email, id: user._id }, jwtSecret!, {
+  expiresIn: '6h',
  });
  return { token };
 };
@@ -98,6 +105,9 @@ export const updateUser = async (
  id: string,
  data: UpdateUserRequest
 ): Promise<UserResponse> => {
+ if (data.password) {
+  data.password = await bcrypt.hash(data.password, 10);
+ }
  const updatedUser = await User.findByIdAndUpdate(id, data, {
   new: true,
  }).populate('accounts');
