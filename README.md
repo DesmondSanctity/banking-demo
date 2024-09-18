@@ -22,6 +22,8 @@ The project is built using the following technologies:
 - Typescript
 - MongoDB and Mongoose for the database/ORM
 - Express for the backend framework
+- Express Rate Limiter for rate limiting
+- JWT for bearer authentication
 - HTML/CSS for the frontend
 - Jest for unit testing
 - Zod for validation
@@ -100,11 +102,11 @@ The application follows the microservices approach of building software. The who
 
 ## considerations
 To achieve a very scalable, simple and easy to maintain codebase, the following considerations were made:
-- Database transaction concept is used to handle database events like account creation for a user, send money functionality, create/delete account and user functionality. This is to avoid race conditions, mantain data integrity and to ensure that the database is always in a consistent state.
-- The application is built using the monolithic approach of building software. This is to ensure that the application is easy to maintain and scale.
-- The application is built using Typescript. This is to ensure that we have control of the data flow of the application, readable ans easy to maintain.
-- The necessary middlewares are implemented to handle the authentication, logging, and validation of the application.
+- Database transaction concept is used to handle database events like account creation for a user, send money functionality, create/delete account and user functionality. This is to avoid race conditions, maintain data integrity and to ensure that the database is always in a consistent state.
+- The application is built using Typescript. This is to ensure that we have control of the data flow of the application, readable and easy to maintain.
+- The necessary middlewares are implemented to handle the API call rate limit, authentication, logging, and validation of the application.
 - The application is built using the microservices approach of building software. This is to ensure that services are independent of each other and can be scaled independently.
+
 
 ## improvements to be made
 - Ensuring service resilience in production:
