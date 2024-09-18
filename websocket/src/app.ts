@@ -10,6 +10,8 @@ import { port } from './config/app.config.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
@@ -19,7 +21,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/api/websocket/errors', async (req, res) => {
  try {
-  const errorFilePath = path.join(__dirname, '..', '..', 'errors.txt');
+  const errorFilePath = isProduction ? '/tmp/errors.txt' : path.join(__dirname, '..', '..', 'errors.txt');
   console.log(errorFilePath);
   const content = await fs.readFile(errorFilePath, 'utf-8');
   res.type('text/plain').send(content);
@@ -30,7 +32,7 @@ app.get('/api/websocket/errors', async (req, res) => {
 
 app.get('/api/websocket/interactions', async (req, res) => {
  try {
-  const interactionFilePath = path.join(
+  const interactionFilePath = isProduction ? '/tmp/interactions.txt' : path.join(
    __dirname,
    '..',
    '..',
