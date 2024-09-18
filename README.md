@@ -3,6 +3,19 @@ Product Backend Engineering Assessment For Mono
 
 This is a simple banking application that allows users to create accounts, deposit and withdraw money, and view their account balance.
 
+Service #1: 
+- [https://banking-demo.onrender.com](https://banking-demo.onrender.com)
+
+Swagger Docs Service #1: 
+- [https://banking-demo.onrender.com/docs/#/](https://banking-demo.onrender.com/docs/#/)
+
+Service #2: 
+- [https://websocket-p1rk.onrender.com](https://websocket-p1rk.onrender.com)
+
+Websocket Logs Service #2: 
+- [https://websocket-p1rk.onrender.com/api/websocket/errors](https://websocket-p1rk.onrender.com/api/websocket/errors)
+- [https://websocket-p1rk.onrender.com/api/websocket/interactions](https://websocket-p1rk.onrender.com/api/websocket/interactions)
+
 ## project architecture
 The project is built using the following technologies:
 - Node.js
